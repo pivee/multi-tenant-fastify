@@ -3,21 +3,28 @@ import { PrismaClient } from "@prisma-tenant/prisma/client";
 import { FastifyInstance, FastifyPluginAsync } from 'fastify';
 
 declare module "fastify" {
-  interface FastifyInstance {
+  interface FastifyRequest {
+    tenantCode: string;
     tenantPrisma: PrismaClient;
   }
 }
 
 const tenantPrismaPlugin: FastifyPluginAsync = fp(async (server: FastifyInstance, options) => {
-  const tenantPrisma = new PrismaClient({ 
-    log: ["error", "info", "query", "warn"],
-    datasourceUrl: `postgresql://postgres:qweqwe@localhost:5432/sandbox?schema=tenant_a` // WIP:
-   });
+  server.decorateRequest("tenantPrisma", null);
 
-  server.decorate("tenantPrisma", tenantPrisma);
+  server.addHook("onRequest", async (request, reply) => {
+    const tenantCode = request.headers["x-tenant-code"] as string;
 
-  server.addHook("onClose", async () => {
-    await server.tenantPrisma.$disconnect();
+    const tenantPrisma = new PrismaClient({
+      log: ["error", "info", "query", "warn"],
+      datasourceUrl: `postgresql://postgres:qweqwe@localhost:5432/sandbox?schema=${tenantCode}`
+    });
+
+    request.tenantPrisma = tenantPrisma;
+  });
+
+  server.addHook("onResponse", async (request, reply) => {
+    await request.tenantPrisma.$disconnect();
   });
 });
 
