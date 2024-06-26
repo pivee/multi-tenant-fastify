@@ -3,6 +3,10 @@ import fastify from 'fastify';
 const server = fastify({ logger: true });
 
 server.get('/hello', async (request, reply) => {
+  const tenantCode = request.headers["x-tenant-code"];
+
+  console.log("🚩 Tenant Code: ", tenantCode);
+  
   return "Hello World!";
 });
 
