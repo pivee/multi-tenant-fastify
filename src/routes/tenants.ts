@@ -1,5 +1,4 @@
 import { FastifyInstance } from 'fastify';
-import { PrismaClient } from "@prisma-public/prisma/client";
 
 export async function tenantsRoutes(server: FastifyInstance) {
   server.get('/tenants', async (request, reply) => {

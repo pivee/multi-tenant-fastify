@@ -2,9 +2,11 @@ import dotenv from 'dotenv';
 import fastify from 'fastify';
 import { registerHooks } from './hooks';
 import publicPrismaPlugin from './plugins/publicPrisma';
+import tenantPrismaPlugin from './plugins/tenantPrisma';
 import { helloRoutes } from './routes/hello';
 import { tenantCodeRoutes } from './routes/tenant-code';
 import { tenantsRoutes } from './routes/tenants';
+import { usersRoutes } from './routes/users';
 
 dotenv.config();
 
@@ -19,10 +21,12 @@ const server = fastify({ logger: true });
 registerHooks(server);
 
 server.register(publicPrismaPlugin);
+server.register(tenantPrismaPlugin);
 
 server.register(helloRoutes);
 server.register(tenantCodeRoutes);
 server.register(tenantsRoutes);
+server.register(usersRoutes);
 
 const start = async () => {
   try {
