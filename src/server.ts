@@ -1,13 +1,29 @@
-import fastify from 'fastify';
+import fastify, { FastifyRequest } from 'fastify';
+
+declare module "fastify" {
+  interface FastifyRequest {
+    tenantCode: string;
+  }
+}
 
 const server = fastify({ logger: true });
 
-server.get('/hello', async (request, reply) => {
-  const tenantCode = request.headers["x-tenant-code"];
+server.addHook("preHandler", (request: FastifyRequest, reply, done) => {
+  const tenantCode = request.headers["x-tenant-code"] as string;
 
-  console.log("🚩 Tenant Code: ", tenantCode);
-  
+  console.log("🪝 Tenant Code: ", tenantCode);
+
+  request.tenantCode = tenantCode;
+
+  done();
+})
+
+server.get('/hello', async (request, reply) => {
   return "Hello World!";
+});
+
+server.get('/tenant-code', async (request, reply) => {
+  return request.tenantCode;
 });
 
 const start = async () => {
