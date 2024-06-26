@@ -1,6 +1,6 @@
-import fp from 'fastify-plugin';
 import { PrismaClient } from "@prisma-tenant/prisma/client";
 import { FastifyInstance, FastifyPluginAsync } from 'fastify';
+import fp from 'fastify-plugin';
 
 declare module "fastify" {
   interface FastifyRequest {
@@ -15,9 +15,14 @@ const tenantPrismaPlugin: FastifyPluginAsync = fp(async (server: FastifyInstance
   server.addHook("onRequest", async (request, reply) => {
     const tenantCode = request.headers["x-tenant-code"] as string;
 
+    const tenant = await server.publicPrisma.tenant.findFirst({
+      where: { code: tenantCode },
+      include: { datasource: true }
+    });
+
     const tenantPrisma = new PrismaClient({
       log: ["error", "info", "query", "warn"],
-      datasourceUrl: `postgresql://postgres:qweqwe@localhost:5432/sandbox?schema=${tenantCode}`
+      datasourceUrl: tenant?.datasource.url
     });
 
     request.tenantPrisma = tenantPrisma;

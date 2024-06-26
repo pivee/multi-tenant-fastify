@@ -11,6 +11,7 @@ datasource db {
 model Tenant {
   id           Int        @id @default(autoincrement())
   name         String?
+  code         String
   datasource   Datasource @relation(fields: [datasourceId], references: [id])
   datasourceId Int
 }
