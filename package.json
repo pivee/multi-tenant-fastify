@@ -4,17 +4,21 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev": "nodemon"
+    "dev": "nodemon",
+    "db:push:catalog": "prisma db push --schema=./prisma/catalog-schema.prisma",
+    "db:push:tenant": "prisma db push --schema=./prisma/tenant-schema.prisma"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@prisma/client": "^5.16.0",
     "fastify": "^4.28.0"
   },
   "devDependencies": {
     "@types/node": "^20.14.9",
     "nodemon": "^3.1.4",
+    "prisma": "^5.16.0",
     "ts-node": "^10.9.2",
     "typescript": "^5.5.2"
   }

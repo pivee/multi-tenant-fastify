@@ -1,0 +1,21 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("CATALOG_DATABASE_URL")
+}
+
+model Tenant {
+  id           Int        @id @default(autoincrement())
+  name         String?
+  datasource   Datasource @relation(fields: [datasourceId], references: [id])
+  datasourceId Int
+}
+
+model Datasource {
+  id     Int      @id @default(autoincrement())
+  url    String
+  Tenant Tenant[]
+}
