@@ -2,11 +2,13 @@
   "name": "multi-tenant-fastify",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "server.js",
   "scripts": {
+    "build": "tsc",
     "dev": "nodemon",
     "db:push:public": "prisma db push --schema=./prisma/public-schema.prisma",
-    "db:push:tenant": "prisma db push --schema=./prisma/tenant-schema.prisma"
+    "db:push:tenant": "prisma db push --schema=./prisma/tenant-schema.prisma",
+    "start": "node dist/server.js"
   },
   "keywords": [],
   "author": "",
