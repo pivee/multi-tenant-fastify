@@ -2,8 +2,8 @@ import fastify from 'fastify';
 
 const server = fastify({ logger: true });
 
-server.get('/', async (request, reply) => {
-  return { hello: 'world' };
+server.get('/hello', async (request, reply) => {
+  return "Hello World!";
 });
 
 const start = async () => {
