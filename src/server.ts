@@ -1,7 +1,7 @@
 import dotenv from 'dotenv';
 import fastify from 'fastify';
 import { registerHooks } from './hooks';
-import { publicPrismaPlugin } from './plugins/publicPrisma';
+import publicPrismaPlugin from './plugins/publicPrisma';
 import { helloRoutes } from './routes/hello';
 import { tenantCodeRoutes } from './routes/tenant-code';
 import { tenantsRoutes } from './routes/tenants';
@@ -17,6 +17,8 @@ declare module "fastify" {
 const server = fastify({ logger: true });
 
 registerHooks(server);
+
+server.register(publicPrismaPlugin);
 
 server.register(helloRoutes);
 server.register(tenantCodeRoutes);
