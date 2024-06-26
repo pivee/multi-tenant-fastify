@@ -1,6 +1,7 @@
 import fastify, { FastifyRequest } from 'fastify';
 import { helloRoutes } from './routes/hello';
 import { tenantCodeRoutes } from './routes/tenant-code';
+import { registerHooks } from './hooks';
 
 declare module "fastify" {
   interface FastifyRequest {
@@ -10,15 +11,7 @@ declare module "fastify" {
 
 const server = fastify({ logger: true });
 
-server.addHook("preHandler", (request: FastifyRequest, reply, done) => {
-  const tenantCode = request.headers["x-tenant-code"] as string;
-
-  console.log("🪝 Tenant Code: ", tenantCode);
-
-  request.tenantCode = tenantCode;
-
-  done();
-})
+registerHooks(server);
 
 server.register(helloRoutes);
 server.register(tenantCodeRoutes);
