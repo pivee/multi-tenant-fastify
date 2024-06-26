@@ -1,4 +1,6 @@
 import fastify, { FastifyRequest } from 'fastify';
+import { helloRoutes } from './routes/hello';
+import { tenantCodeRoutes } from './routes/tenant-code';
 
 declare module "fastify" {
   interface FastifyRequest {
@@ -18,13 +20,8 @@ server.addHook("preHandler", (request: FastifyRequest, reply, done) => {
   done();
 })
 
-server.get('/hello', async (request, reply) => {
-  return "Hello World!";
-});
-
-server.get('/tenant-code', async (request, reply) => {
-  return request.tenantCode;
-});
+server.register(helloRoutes);
+server.register(tenantCodeRoutes);
 
 const start = async () => {
   try {
