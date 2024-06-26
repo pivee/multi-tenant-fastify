@@ -1,7 +1,7 @@
-import fastify, { FastifyRequest } from 'fastify';
+import fastify from 'fastify';
+import { registerHooks } from './hooks';
 import { helloRoutes } from './routes/hello';
 import { tenantCodeRoutes } from './routes/tenant-code';
-import { registerHooks } from './hooks';
 
 declare module "fastify" {
   interface FastifyRequest {
