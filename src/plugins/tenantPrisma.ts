@@ -1,6 +1,7 @@
 import { PrismaClient } from "@prisma-tenant/prisma/client";
-import { FastifyInstance, FastifyPluginAsync } from 'fastify';
-import fp from 'fastify-plugin';
+import { FastifyInstance, FastifyPluginAsync } from "fastify";
+import fp from "fastify-plugin";
+import { usersRoutes } from "../routes/users";
 
 declare module "fastify" {
   interface FastifyRequest {
@@ -9,7 +10,12 @@ declare module "fastify" {
   }
 }
 
-const tenantPrismaPlugin: FastifyPluginAsync = fp(async (server: FastifyInstance, options) => {
+const tenantPrismaPlugin: FastifyPluginAsync = async (
+  server: FastifyInstance,
+  options
+) => {
+  console.log(server);
+
   server.decorateRequest("tenantPrisma", null);
 
   server.addHook("onRequest", async (request, reply) => {
@@ -17,12 +23,12 @@ const tenantPrismaPlugin: FastifyPluginAsync = fp(async (server: FastifyInstance
 
     const tenant = await server.publicPrisma.tenant.findFirst({
       where: { code: tenantCode },
-      include: { datasource: true }
+      include: { datasource: true },
     });
 
     const tenantPrisma = new PrismaClient({
       log: ["error", "info", "query", "warn"],
-      datasourceUrl: tenant?.datasource.url
+      datasourceUrl: tenant?.datasource.url,
     });
 
     request.tenantPrisma = tenantPrisma;
@@ -31,6 +37,8 @@ const tenantPrismaPlugin: FastifyPluginAsync = fp(async (server: FastifyInstance
   server.addHook("onResponse", async (request, reply) => {
     await request.tenantPrisma.$disconnect();
   });
-});
+
+  server.register(usersRoutes);
+};
 
 export default tenantPrismaPlugin;
