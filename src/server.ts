@@ -6,6 +6,7 @@ import { helloRoutes } from './routes/hello';
 import { tenantCodeRoutes } from './routes/tenant-code';
 import { tenantsRoutes } from './routes/tenants';
 import { usersRoutes } from './routes/users';
+import { usersSadRouter } from "./routes/users-sad";
 
 dotenv.config();
 
@@ -18,12 +19,12 @@ declare module "fastify" {
 const server = fastify({ logger: true });
 
 server.register(publicPrismaPlugin);
-server.register(tenantPrismaPlugin);
 
 server.register(helloRoutes);
 server.register(tenantCodeRoutes);
 server.register(tenantsRoutes);
 server.register(usersRoutes);
+server.register(usersSadRouter);
 
 const start = async () => {
   try {
