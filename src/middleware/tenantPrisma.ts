@@ -1,6 +1,6 @@
 import { PrismaClient as PublicPrismaClient } from "@prisma-public/prisma/client";
 import { PrismaClient as TenantPrismaClient } from "@prisma-tenant/prisma/client";
-import { FastifyInstance, FastifyReply, FastifyRequest } from "fastify";
+import { FastifyReply, FastifyRequest } from "fastify";
 
 declare module "fastify" {
   interface FastifyInstance {

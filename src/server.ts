@@ -19,7 +19,6 @@ declare module "fastify" {
 const server = fastify({ logger: true });
 
 server.register(publicPrismaPlugin);
-server.register(tenantPrismaPlugin);
 
 server.register(helloRoutes);
 server.register(tenantCodeRoutes);
