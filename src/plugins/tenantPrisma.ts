@@ -10,8 +10,10 @@ declare module "fastify" {
 }
 
 const tenantPrismaPlugin: FastifyPluginAsync = fp(
-  async (server: FastifyInstance, options) => {
-    server.addHook("onResponse", async (request, reply) => {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  async (server: FastifyInstance, _options) => {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    server.addHook("onResponse", async (request, _reply) => {
       if (request.tenantPrisma) {
         await request.tenantPrisma?.$disconnect();
       }

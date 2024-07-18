@@ -15,7 +15,8 @@ declare module "fastify" {
 
 export default async function tenantPrismaMiddleware(
   request: FastifyRequest,
-  reply: FastifyReply
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  _reply: FastifyReply
 ) {
   const tenantCode = request.headers["x-tenant-code"] as string;
 
